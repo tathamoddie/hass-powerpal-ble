@@ -1,3 +1,3 @@
-"""Constants for the OralB integration."""
+"""Constants for the Powerpal integration."""
 
-DOMAIN = "oralb"
+DOMAIN = "powerpal"

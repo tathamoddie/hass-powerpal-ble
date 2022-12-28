@@ -1,15 +1,19 @@
 {
-  "domain": "oralb",
-  "name": "Oral-B",
+  "domain": "powerpal",
+  "name": "Powerpal",
+  "version": "0.0.1",
   "config_flow": true,
-  "documentation": "https://www.home-assistant.io/integrations/oralb",
+  "documentation": "https://github.com/tathamoddie/hass-powerpal-ble",
   "bluetooth": [
     {
-      "manufacturer_id": 220
+      "local_name": "Powerpal*"
+    },
+    {
+      "service_data_uuid": "0000fcd7-0000-1000-8000-00805f9b34fb"
     }
   ],
   "requirements": ["oralb-ble==0.14.3"],
   "dependencies": ["bluetooth"],
-  "codeowners": ["@bdraco"],
+  "codeowners": ["@tathamoddie"],
   "iot_class": "local_push"
 }

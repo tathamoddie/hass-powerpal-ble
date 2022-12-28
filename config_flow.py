@@ -1,6 +1,8 @@
 """Config flow for oralb ble integration."""
 from __future__ import annotations
 
+import logging
+
 from typing import Any
 
 from oralb_ble import OralBBluetoothDeviceData as DeviceData
@@ -16,9 +18,10 @@ from homeassistant.data_entry_flow import FlowResult
 
 from .const import DOMAIN
 
+_LOGGER = logging.getLogger(__name__)
 
-class OralBConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for oralb."""
+class PowerpalConfigFlow(ConfigFlow, domain=DOMAIN):
+    """Handle a config flow for powerpal."""
 
     VERSION = 1
 
@@ -35,8 +38,9 @@ class OralBConfigFlow(ConfigFlow, domain=DOMAIN):
         await self.async_set_unique_id(discovery_info.address)
         self._abort_if_unique_id_configured()
         device = DeviceData()
-        if not device.supported(discovery_info):
-            return self.async_abort(reason="not_supported")
+        # if not device.supported(discovery_info):
+        #     return self.async_abort(reason="not_supported")
+        _LOGGER.debug("Device discovered: %s", discovery_info)
         self._discovery_info = discovery_info
         self._discovered_device = device
         return await self.async_step_bluetooth_confirm()
@@ -45,11 +49,11 @@ class OralBConfigFlow(ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Confirm discovery."""
-        assert self._discovered_device is not None
-        device = self._discovered_device
+        # assert self._discovered_device is not None
+        # device = self._discovered_device
         assert self._discovery_info is not None
         discovery_info = self._discovery_info
-        title = device.title or device.get_device_name() or discovery_info.name
+        title = discovery_info.name
         if user_input is not None:
             return self.async_create_entry(title=title, data={})
 
