@@ -1,4 +1,4 @@
-"""Config flow for oralb ble integration."""
+"""Config flow for Powerpal integration."""
 from __future__ import annotations
 
 import logging
@@ -55,7 +55,7 @@ class PowerpalConfigFlow(ConfigFlow, domain=DOMAIN):
         discovery_info = self._discovery_info
         title = discovery_info.name
         if user_input is not None:
-            return self.async_create_entry(title=title, data={})
+            return await self.async_step_pairing()
 
         self._set_confirm_only()
         placeholders = {"name": title}
@@ -94,5 +94,27 @@ class PowerpalConfigFlow(ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {vol.Required(CONF_ADDRESS): vol.In(self._discovered_devices)}
+            ),
+        )
+
+    async def async_step_pairing(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Gather pairing code."""
+        # assert self._discovered_device is not None
+        # device = self._discovered_device
+        assert self._discovery_info is not None
+        discovery_info = self._discovery_info
+        title = discovery_info.name
+        if user_input is not None:
+            return self.async_create_entry(title=title, data={})
+
+        self._set_confirm_only()
+        placeholders = {"name": title}
+        self.context["title_placeholders"] = placeholders
+        return self.async_show_form(
+            step_id="async_step_pairing",
+            data_schema=vol.Schema(
+                {vol.Required("pairing_code")}
             ),
         )
